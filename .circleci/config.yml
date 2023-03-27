@@ -1,0 +1,24 @@
+version: 2.1
+
+commands:
+  base64decode-secret:
+    steps:
+      - run:
+          name: Decode (base64) << parameters.secret >>
+          command: << parameters.command >> 
+
+jobs:
+  build:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      # See https://circleci.com/docs/env-vars/#secrets-masking
+      - run:
+          name: decode via echo
+          command: echo $SECRET_BASE64 | base64 -d
+          when: always
+      - run:
+          name: decode via printenv
+          command: printenv SECRET_BASE64 | base64 -d
+          when: always
