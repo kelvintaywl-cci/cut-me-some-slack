@@ -1,12 +1,5 @@
 version: 2.1
 
-commands:
-  base64decode-secret:
-    steps:
-      - run:
-          name: Decode (base64) << parameters.secret >>
-          command: << parameters.command >> 
-
 jobs:
   build:
     docker:
