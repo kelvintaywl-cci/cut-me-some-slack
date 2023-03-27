@@ -8,6 +8,10 @@ jobs:
     steps:
       # See https://circleci.com/docs/env-vars/#secrets-masking
       - run:
+          name: Check masking
+          # should be masked here
+          command: echo $SECRET_BASE64
+      - run:
           name: decode via echo
           command: echo $SECRET_BASE64 | base64 -d
           when: always
