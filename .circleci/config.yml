@@ -1,10 +1,14 @@
 version: 2.1
 
+orbs:
+  circleci-cli: circleci/circleci-cli@0.1.9
+
 jobs:
   cli:
     docker:
       - image: cimg/go:1.18-node
     steps:
+      - circleci-cli/install
       - run:
           name: test CLI
           command: |
