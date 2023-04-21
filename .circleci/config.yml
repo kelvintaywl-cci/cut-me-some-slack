@@ -1,21 +1,23 @@
 version: 2.1
 
 jobs:
-  build:
+  cli:
     docker:
-      - image: cimg/base:current
-    resource_class: small
+      - image: cimg/go:1.18-node
     steps:
-      # See https://circleci.com/docs/env-vars/#secrets-masking
       - run:
-          name: Check masking
-          # should be masked here
-          command: echo $SECRET_BASE64
+          name: test CLI
+          command: |
+            which circleci
+      - checkout
       - run:
-          name: decode via echo
-          command: echo $SECRET_BASE64 | base64 -d
-          when: always
-      - run:
-          name: decode via printenv
-          command: printenv SECRET_BASE64 | base64 -d
-          when: always
+          name: validate CI config
+          command: |
+            # will exit 1 with the following error:
+            #   Error: Configuration version 2.1 requires the "Enable Pipelines" project setting. Enable pipelines under Project Settings -> Advanced Settings. In order to retrigger pipelines, you must push a new commit.
+            circleci config validate
+
+workflows:
+  main:
+    jobs:
+      - cli
