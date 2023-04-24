@@ -359,6 +359,7 @@ orbs:
 
 jobs:
   build:
+    parallelism: 25
     docker:
       - image: cimg/base:current
     resource_class: small
