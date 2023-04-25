@@ -1,21 +1,21 @@
 version: 2.1
 
+orbs:
+  node: circleci/node@5.1.0
+
 jobs:
   build:
     docker:
-      - image: cimg/base:current
+      - image: cimg/php:7.2.34
     resource_class: small
     steps:
-      # See https://circleci.com/docs/env-vars/#secrets-masking
       - run:
-          name: Check masking
-          # should be masked here
-          command: echo $SECRET_BASE64
-      - run:
-          name: decode via echo
-          command: echo $SECRET_BASE64 | base64 -d
-          when: always
-      - run:
-          name: decode via printenv
-          command: printenv SECRET_BASE64 | base64 -d
-          when: always
+          name: inspect
+          command: |
+            # just to show neither nvm nor node is installed
+            which node || which nvm || true
+      - node/install:
+          node-version: '10.18.0'
+      - run: |
+          node -v
+          npm -v
