@@ -1,21 +1,17 @@
 version: 2.1
 
 jobs:
-  build:
+  test:
     docker:
       - image: cimg/base:current
     resource_class: small
     steps:
-      # See https://circleci.com/docs/env-vars/#secrets-masking
-      - run:
-          name: Check masking
-          # should be masked here
-          command: echo $SECRET_BASE64
-      - run:
-          name: decode via echo
-          command: echo $SECRET_BASE64 | base64 -d
-          when: always
-      - run:
-          name: decode via printenv
-          command: printenv SECRET_BASE64 | base64 -d
-          when: always
+      - run: printenv CIRCLE_NODE_INDEX
+
+workflows:
+  approval-required:
+    jobs:
+      - hold:
+          type: approval
+          requires:
+           - test
